@@ -1,0 +1,6 @@
+.light-theme {
+  --bg: #f1f5f9;
+  --bg-glass: rgba(241, 245, 249, 0.85);
+  --text: #1e293b;
+  --text-muted: #64748b;
+}
