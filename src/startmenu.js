@@ -1,3 +1,8 @@
+/**
+ * src/startmenu.js
+ * Меню Пуск
+ */
+
 const StartMenu = {
   init() {
     const btn = document.getElementById('start-btn');
@@ -5,14 +10,10 @@ const StartMenu = {
     const search = document.getElementById('start-search');
 
     btn.onclick = () => menu.classList.toggle('hidden');
-    document.addEventListener('click', e => {
-      if (!btn.contains(e.target) && !menu.contains(e.target)) {
-        menu.classList.add('hidden');
-      }
-    });
 
     this.render();
     search.oninput = () => this.filter(search.value);
+    search.focus();
   },
 
   render() {
@@ -26,8 +27,10 @@ const StartMenu = {
   },
 
   filter(query) {
+    const lower = query.toLowerCase();
     document.querySelectorAll('.start-app').forEach(app => {
-      app.style.display = app.textContent.toLowerCase().includes(query.toLowerCase()) ? 'flex' : 'none';
+      const text = app.textContent.toLowerCase();
+      app.style.display = text.includes(lower) ? 'flex' : 'none';
     });
   }
 };
