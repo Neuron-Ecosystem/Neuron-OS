@@ -4,21 +4,21 @@ const Assistant = {
   },
 
   open() {
-    WindowManager.open('assistant', 'Neuron Assistant', 'src/apps/synapse.html', 'synapse.svg');
+    WindowManager.open('assistant', 'Neuron Assistant', 'src/apps/assistant.html', 'synapse.svg');
   },
 
-  handleCommand(cmd) {
+  handle(cmd) {
     cmd = cmd.trim().toLowerCase();
     if (cmd.startsWith('/open ')) {
-      const app = cmd.slice(6);
-      const found = Desktop.icons.find(a => a.name.toLowerCase().includes(app));
-      if (found) WindowManager.open(found.id, found.name, found.url, found.icon);
+      const name = cmd.slice(6);
+      const app = Desktop.apps.find(a => a.name.toLowerCase().includes(name));
+      if (app) WindowManager.open(app.id, app.name, app.url, app.icon);
     } else if (cmd === '/theme dark') {
       Settings.setTheme('dark');
     } else if (cmd === '/theme light') {
       Settings.setTheme('light');
     } else if (cmd === '/help') {
-      alert(`/open notes\n/open converter\n/theme dark\n/help`);
+      alert(`Доступные команды:\n/open notes\n/open converter\n/theme dark\n/theme light\n/help`);
     }
   }
 };
