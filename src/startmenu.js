@@ -11,13 +11,13 @@ const StartMenu = {
       }
     });
 
-    this.renderApps();
-    search.oninput = () => this.filterApps(search.value);
+    this.render();
+    search.oninput = () => this.filter(search.value);
   },
 
-  renderApps() {
+  render() {
     const container = document.getElementById('start-apps');
-    container.innerHTML = Desktop.icons.map(app => `
+    container.innerHTML = Desktop.apps.map(app => `
       <div class="start-app" onclick="WindowManager.open('${app.id}', '${app.name}', '${app.url}', '${app.icon}'); document.getElementById('start-menu').classList.add('hidden')">
         <img src="assets/icons/${app.icon}" alt="${app.name}">
         <span>${app.name}</span>
@@ -25,11 +25,9 @@ const StartMenu = {
     `).join('');
   },
 
-  filterApps(query) {
-    const apps = document.querySelectorAll('.start-app');
-    apps.forEach(app => {
-      const text = app.textContent.toLowerCase();
-      app.style.display = text.includes(query.toLowerCase()) ? 'flex' : 'none';
+  filter(query) {
+    document.querySelectorAll('.start-app').forEach(app => {
+      app.style.display = app.textContent.toLowerCase().includes(query.toLowerCase()) ? 'flex' : 'none';
     });
   }
 };
