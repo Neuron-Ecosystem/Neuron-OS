@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Neuron OS</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" href="assets/logo.svg" type="image/svg+xml">
+  <meta name="theme-color" content="#1a1a2e">
+
+  <!-- Шрифт -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Interact.js -->
+  <script src="https://cdn.jsdelivr.net/npm/interactjs/dist/interact.min.js"></script>
+
+  <!-- Стили -->
+  <link rel="stylesheet" href="styles/global.css" />
+  <link rel="stylesheet" href="styles/desktop.css" />
+  <link rel="stylesheet" href="styles/window.css" />
+  <link rel="stylesheet" href="styles/startmenu.css" />
+  <link rel="stylesheet" href="styles/theme.css" />
+
+  <style>
+    :root {
+      --bg: #0f0f1e;
+      --bg-glass: rgba(15, 15, 30, 0.7);
+      --accent: #7c3aed;
+      --text: #e0e7ff;
+      --text-muted: #94a3b8;
+      --border: rgba(255, 255, 255, 0.1);
+    }
+    .light-theme {
+      --bg: #f8f9fa;
+      --bg-glass: rgba(248, 249, 250, 0.8);
+      --accent: #5b21b6;
+      --text: #1e293b;
+      --text-muted: #64748b;
+      --border: rgba(0, 0, 0, 0.1);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Рабочий стол -->
+  <div id="desktop">
+    <img id="wallpaper" src="assets/wallpapers/default.jpg" alt="Wallpaper" />
+    <div id="icons-container"></div>
+  </div>
+
+  <!-- Панель задач -->
+  <div id="taskbar">
+    <button id="start-btn">🧠 Neuron</button>
+    <div id="taskbar-apps"></div>
+    <div id="taskbar-right">
+      <span id="clock"></span>
+      <button id="assistant-btn" title="Neuron Assistant">🧠</button>
+    </div>
+  </div>
+
+  <!-- Меню Пуск -->
+  <div id="start-menu" class="hidden">
+    <input type="text" id="start-search" placeholder="Поиск приложений..." />
+    <div id="start-apps"></div>
+  </div>
+
+  <!-- Окна -->
+  <div id="windows-container"></div>
+
+  <!-- Скрипты -->
+  <script src="src/storage.js"></script>
+  <script src="src/settings.js"></script>
+  <script src="src/desktop.js"></script>
+  <script src="src/window.js"></script>
+  <script src="src/startmenu.js"></script>
+  <script src="src/assistant.js"></script>
+  <script src="src/synapse.js"></script>
+  <script src="src/app.js"></script>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('service-worker.js');
+      });
+    }
+  </script>
+</body>
+</html>
