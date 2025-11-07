@@ -23,20 +23,25 @@
 
   <style>
     :root {
-      --bg: #0f0f1e;
-      --bg-glass: rgba(15, 15, 30, 0.7);
+      --bg: #0a0a1a;
+      --glass: rgba(20, 20, 40, 0.65);
+      --glass-hover: rgba(30, 30, 60, 0.8);
       --accent: #7c3aed;
+      --accent-glow: #a78bfa;
       --text: #e0e7ff;
       --text-muted: #94a3b8;
-      --border: rgba(255, 255, 255, 0.1);
+      --border: rgba(255, 255, 255, 0.12);
+      --shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
     }
     .light-theme {
-      --bg: #f8f9fa;
-      --bg-glass: rgba(248, 249, 250, 0.8);
+      --bg: #f8f9ff;
+      --glass: rgba(248, 249, 255, 0.75);
+      --glass-hover: rgba(240, 242, 255, 0.9);
       --accent: #5b21b6;
       --text: #1e293b;
       --text-muted: #64748b;
       --border: rgba(0, 0, 0, 0.1);
+      --shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
     }
   </style>
 </head>
@@ -44,23 +49,24 @@
 
   <!-- Рабочий стол -->
   <div id="desktop">
-    <img id="wallpaper" src="assets/wallpapers/default.jpg" alt="Wallpaper" />
+    <div id="wallpaper"></div>
     <div id="icons-container"></div>
   </div>
 
   <!-- Панель задач -->
   <div id="taskbar">
-    <button id="start-btn">🧠 Neuron</button>
+    <button id="start-btn" class="glow-btn">Neuron</button>
     <div id="taskbar-apps"></div>
     <div id="taskbar-right">
       <span id="clock"></span>
-      <button id="assistant-btn" title="Neuron Assistant">🧠</button>
+      <button id="assistant-btn" class="glow-btn" title="Neuron Assistant">AI</button>
+      <button id="settings-btn" class="glow-btn" title="Settings">Settings</button>
     </div>
   </div>
 
   <!-- Меню Пуск -->
-  <div id="start-menu" class="hidden">
-    <input type="text" id="start-search" placeholder="Поиск приложений..." />
+  <div id="start-menu" class="glass-panel hidden">
+    <input type="text" id="start-search" placeholder="Поиск..." />
     <div id="start-apps"></div>
   </div>
 
@@ -74,7 +80,6 @@
   <script src="src/window.js"></script>
   <script src="src/startmenu.js"></script>
   <script src="src/assistant.js"></script>
-  <script src="src/synapse.js"></script>
   <script src="src/app.js"></script>
 
   <script>
