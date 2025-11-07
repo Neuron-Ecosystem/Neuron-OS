@@ -1,0 +1,47 @@
+#start-menu {
+  position: fixed;
+  bottom: 60px;
+  left: 10px;
+  width: 360px;
+  background: var(--bg-glass);
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: 0 16px 48px rgba(0,0,0,0.4);
+  padding: 16px;
+  animation: menuOpen 0.25s ease-out;
+}
+
+@keyframes menuOpen {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+#start-search {
+  width: 100%;
+  padding: 12px;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  color: var(--text);
+  margin-bottom: 12px;
+}
+
+.start-app {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.start-app:hover {
+  background: rgba(124, 58, 237, 0.2);
+}
+
+.start-app img {
+  width: 32px;
+  height: 32px;
+}
