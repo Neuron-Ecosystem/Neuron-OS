@@ -1,8 +1,7 @@
 const Storage = {
   get(key, def) {
     try {
-      const val = localStorage.getItem(`neuron_${key}`);
-      return val ? JSON.parse(val) : def;
+      return JSON.parse(localStorage.getItem(`neuron_${key}`)) || def;
     } catch { return def; }
   },
   set(key, val) {
