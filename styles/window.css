@@ -1,59 +1,69 @@
 .window {
   position: absolute;
-  background: var(--bg-glass);
-  backdrop-filter: blur(12px);
+  background: var(--glass);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   border: 1px solid var(--border);
-  border-radius: 16px;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  border-radius: 18px;
+  box-shadow: var(--shadow);
   overflow: hidden;
-  min-width: 300px;
-  min-height: 200px;
-  animation: windowOpen 0.3s ease-out;
+  min-width: 360px;
+  min-height: 240px;
+  animation: windowOpen 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
   display: flex;
   flex-direction: column;
+  z-index: 100;
 }
 
 @keyframes windowOpen {
-  from { transform: scale(0.8); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
+  from { transform: scale(0.7) translateY(30px); opacity: 0; }
+  to { transform: scale(1) translateY(0); opacity: 1; }
 }
 
 .window-header {
-  padding: 12px 16px;
+  padding: 14px 18px;
   background: rgba(255,255,255,0.05);
   border-bottom: 1px solid var(--border);
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   font-weight: 600;
   cursor: move;
+  user-select: none;
 }
 
 .window-header img {
-  width: 20px;
-  height: 20px;
+  width: 22px;
+  height: 22px;
 }
 
 .window-controls {
   margin-left: auto;
   display: flex;
-  gap: 8px;
+  gap: 10px;
 }
 
 .window-btn {
   width: 14px;
   height: 14px;
   border-radius: 50%;
-  transition: 0.2s;
+  transition: all 0.2s ease;
+  cursor: pointer;
 }
 
 .minimize { background: #fbbf24; }
-.close { background: #ef4444; }
 .maximize { background: #22c55e; }
+.close { background: #ef4444; }
+
+.window-btn:hover {
+  transform: scale(1.2);
+  box-shadow: 0 0 10px currentColor;
+}
 
 .window-content {
   flex: 1;
   overflow: hidden;
+  background: rgba(0,0,0,0.02);
 }
 
 .window iframe {
