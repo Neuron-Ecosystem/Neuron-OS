@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { margin: 0; padding: 16px; background: #0001; color: #e0e7ff; height: 100vh; display: flex; flex-direction: column; }
+    #chat { flex: 1; overflow-y: auto; padding-bottom: 16px; }
+    .msg { margin: 8px 0; padding: 12px; border-radius: 14px; max-width: 85%; }
+    .ai { background: rgba(124, 58, 237, 0.2); align-self: flex-start; }
+    .user { background: #7c3aed; align-self: flex-end; color: white; }
+    #input { display: flex; gap: 8px; }
+    input { flex: 1; padding: 12px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 12px; color: white; }
+    button { padding: 0 16px; background: #7c3aed; border: none; border-radius: 12px; color: white; }
+  </style>
+</head>
+<body>
+  <div id="chat"><div class="msg ai">Привет! Я Neuron Assistant. Введи /help</div></div>
+  <div id="input">
+    <input type="text" id="cmd" placeholder="/open notes..." />
+    <button onclick="send()">Send</button>
+  </div>
+  <script>
+    function send() {
+      const input = document.getElementById('cmd');
+      const msg = input.value.trim();
+      if (!msg) return;
+      document.getElementById('chat').innerHTML += `<div class="msg user">${msg}</div>`;
+      parent.postMessage({ type: 'assistant', cmd: msg }, '*');
+      input.value = '';
+    }
+    document.getElementById('cmd').addEventListener('keypress', e => e.key === 'Enter' && send());
+  </script>
+</body>
+</html>
