@@ -2,20 +2,20 @@
 <html>
 <head>
   <style>
-    body { margin: 0; padding: 20px; font-family: Inter; color: #e0e7ff; background: #0002; }
-    .setting { margin: 16px 0; }
-    button { background: #7c3aed; color: white; border: none; padding: 10px 16px; border-radius: 12px; cursor: pointer; }
+    body { margin: 0; padding: 20px; background: #0001; color: #e0e7ff; }
+    .group { margin: 20px 0; }
+    button { background: #7c3aed; color: white; border: none; padding: 10px 16px; border-radius: 12px; margin: 4px; cursor: pointer; }
   </style>
 </head>
 <body>
-  <h3>Тема</h3>
-  <div class="setting">
+  <div class="group">
+    <h3>Тема</h3>
     <button onclick="parent.Settings.setTheme('dark')">Тёмная</button>
     <button onclick="parent.Settings.setTheme('light')">Светлая</button>
   </div>
-  <h3>Обои</h3>
-  <div class="setting">
-    <button onclick="parent.Settings.setWallpaper('default.jpg')">Default</button>
+  <div class="group">
+    <h3>Обои</h3>
+    <button onclick="parent.Settings.setWallpaper('space.jpg')">Космос</button>
   </div>
 </body>
 </html>
