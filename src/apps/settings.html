@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { margin: 0; padding: 20px; font-family: Inter; color: #e0e7ff; background: #0002; }
+    .setting { margin: 16px 0; }
+    button { background: #7c3aed; color: white; border: none; padding: 10px 16px; border-radius: 12px; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <h3>Тема</h3>
+  <div class="setting">
+    <button onclick="parent.Settings.setTheme('dark')">Тёмная</button>
+    <button onclick="parent.Settings.setTheme('light')">Светлая</button>
+  </div>
+  <h3>Обои</h3>
+  <div class="setting">
+    <button onclick="parent.Settings.setWallpaper('default.jpg')">Default</button>
+  </div>
+</body>
+</html>
