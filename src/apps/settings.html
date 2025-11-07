@@ -2,20 +2,39 @@
 <html>
 <head>
   <style>
-    body { margin: 0; padding: 20px; background: #0001; color: #e0e7ff; }
-    .group { margin: 20px 0; }
-    button { background: #7c3aed; color: white; border: none; padding: 10px 16px; border-radius: 12px; margin: 4px; cursor: pointer; }
+    :root { --accent: #7c3aed; }
+    body { margin:0; padding:24px; background:rgba(0,0,0,.03); color:var(--text); font-family:'Inter',sans-serif; }
+    .section { margin:24px 0; padding:20px; background:var(--glass); border-radius:16px; backdrop-filter:blur(12px); }
+    h3 { margin:0 0 16px; font-size:18px; }
+    .btn-group { display:flex; gap:12px; flex-wrap:wrap; }
+    button { background:var(--accent); color:#fff; border:none; padding:10px 16px; border-radius:12px; cursor:pointer; font-size:14px; transition:.3s; }
+    button:hover { transform:translateY(-2px); box-shadow:0 8px 20px rgba(124,58,237,.4); }
+    .upload-btn { background:transparent; border:2px dashed var(--border); color:var(--text); padding:16px; width:100%; text-align:center; cursor:pointer; }
+    .upload-btn:hover { border-color:var(--accent); color:var(--accent); }
   </style>
 </head>
 <body>
-  <div class="group">
+  <div class="section">
     <h3>Тема</h3>
-    <button onclick="parent.Settings.setTheme('dark')">Тёмная</button>
-    <button onclick="parent.Settings.setTheme('light')">Светлая</button>
+    <div class="btn-group">
+      <button onclick="parent.Settings.setTheme('dark')">Тёмная</button>
+      <button onclick="parent.Settings.setTheme('light')">Светлая</button>
+    </div>
   </div>
-  <div class="group">
+
+  <div class="section">
     <h3>Обои</h3>
-    <button onclick="parent.Settings.setWallpaper('space.jpg')">Космос</button>
+    <div class="btn-group">
+      <button onclick="parent.Settings.setWallpaper('space.jpg')">Космос</button>
+      <button onclick="parent.Settings.setWallpaper('nature.jpg')">Природа</button>
+      <button onclick="parent.Settings.setWallpaper('city.jpg')">Город</button>
+      <button onclick="parent.Settings.setWallpaper('abstract.jpg')">Абстракция</button>
+      <button onclick="parent.Settings.setWallpaper('minimal.jpg')">Минимализм</button>
+    </div>
+    <label class="upload-btn">
+      Загрузить свои обои
+      <input type="file" accept="image/*" id="wallpaper-upload" style="display:none" onchange="parent.Settings.uploadWallpaper(this)">
+    </label>
   </div>
 </body>
 </html>
