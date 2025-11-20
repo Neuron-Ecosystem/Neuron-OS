@@ -123,7 +123,7 @@ body { overflow: hidden; background: #000; color: #fff; height: 100vh; width: 10
         font-size: 1.8rem; 
     }
     .desktop-icon span { 
-        font-size: 0.7rem; 
+        fontSize: 0.7rem; 
     }
     .dock { 
         bottom: 10px; 
@@ -160,7 +160,7 @@ body { overflow: hidden; background: #000; color: #fff; height: 100vh; width: 10
         font-size: 1.5rem; 
     }
     .desktop-icon span { 
-        font-size: 0.65rem; 
+        fontSize: 0.65rem; 
     }
 }
 
@@ -328,7 +328,7 @@ const state = {
 
 /* Приложения */
 const apps = {
-    'ai': { name: 'Neuron AI', icon: '🧠', url: null, builtin: true },
+    'ai': { name: 'Neuron AI', icon: '🧠', url: 'https://neuron-ai-eta.vercel.app/', builtin: false },
     'notes': { name: 'Neuron Notes', icon: '📝', url: 'https://neuron-p2p.ru/notes.html' },
     'converter': { name: 'Neuron Converter', icon: '🔄', url: 'https://neuron-ecosystem.github.io/Unit-Converter/' },
     'study': { name: 'Neuron Study', icon: '📚', url: 'https://neuron-ecosystem.github.io/Neuron-Study/' },
@@ -703,7 +703,6 @@ function createAppWindow(appId) {
     makeWindowDraggable(win);
 
     // init content
-    if (appId === 'ai') initializeAIChat();
     if (appId === 'settings') initializeSettings();
 
     // показать окно сразу
@@ -865,20 +864,107 @@ function handleContextMenuAction(action, appId) {
             if (apps[appId] && apps[appId].url) window.open(apps[appId].url, '_blank');
             break;
         case 'ask-ai':
-            openApp('ai');
-            setTimeout(()=>{ 
-                const aiInput = document.getElementById('ai-input'); 
-                if(aiInput){ 
-                    aiInput.value = `Расскажи о приложении ${apps[appId].name}`; 
-                    document.getElementById('ai-send')?.click(); 
-                } 
-            }, 500);
+            // Создаем временное окно Neuron AI с встроенным чатом для контекстного запроса
+            createAIContextWindow(appId);
             break;
         case 'toggle':
             toggleAppWindow(appId); break;
         case 'logout':
             handleLogout(); break;
     }
+}
+
+/* Создание временного окна AI для контекстного запроса */
+function createAIContextWindow(targetAppId) {
+    const app = apps['ai'];
+    const container = windowsContainer();
+    const win = document.createElement('div');
+    win.className = 'window';
+    win.dataset.app = 'ai-context';
+    win.dataset.targetApp = targetAppId;
+
+    const headerHtml = `
+        <div class="window-header" onmousedown="startDrag(event,'ai-context')" ontouchstart="handleTouchStart(event,'ai-context')">
+            <div class="window-title"><span>${app.icon}</span><span>Neuron AI (Контекстный запрос)</span></div>
+            <div class="window-controls">
+                <div class="window-control minimize" title="Свернуть" onclick="minimizeApp('ai-context')"></div>
+                <div class="window-control maximize" title="Развернуть" onclick="maximizeApp('ai-context')"></div>
+                <div class="window-control close" title="Закрыть" onclick="closeApp('ai-context')"></div>
+            </div>
+        </div>
+    `;
+    
+    const contentHtml = `
+        <div style="padding:20px;height:100%;display:flex;flex-direction:column;">
+            <div id="ai-context-chat" style="flex:1;overflow-y:auto;margin-bottom:10px;padding:10px;background:rgba(0,0,0,0.2);border-radius:10px;">
+                <div class="ai-message"><strong>Neuron AI:</strong> Привет! Я ваш AI-помощник. Чем могу помочь?</div>
+            </div>
+            <div style="display:flex;gap:10px;">
+                <input id="ai-context-input" type="text" placeholder="Введите команду..." style="flex:1;padding:10px;border-radius:8px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.1);color:white;" value="Расскажи о приложении ${apps[targetAppId].name}">
+                <button id="ai-context-send" style="padding:10px 14px;border-radius:8px;background:#4ecdc4;border:none;cursor:pointer;">Отправить</button>
+            </div>
+        </div>
+    `;
+
+    win.innerHTML = headerHtml + contentHtml;
+    container.appendChild(win);
+
+    // drag
+    makeWindowDraggable(win);
+
+    // init AI chat
+    initializeAIContextChat(win, targetAppId);
+
+    // показать окно сразу
+    win.style.display = 'flex';
+    bringWindowToFront('ai-context');
+    state.openWindows['ai-context'] = win;
+    
+    // фокус на поле ввода
+    setTimeout(() => {
+        const input = win.querySelector('#ai-context-input');
+        if (input) input.focus();
+    }, 100);
+}
+
+/* Инициализация AI чата для контекстного окна */
+function initializeAIContextChat(win, targetAppId) {
+    const sendBtn = win.querySelector('#ai-context-send');
+    const input = win.querySelector('#ai-context-input');
+    const chat = win.querySelector('#ai-context-chat');
+    
+    if (!sendBtn || !input || !chat) return;
+    
+    const sendMessage = () => {
+        const message = input.value.trim();
+        if (!message) return;
+        addAIContextMessage(chat, 'user', message);
+        input.value = '';
+        setTimeout(() => {
+            const response = generateAIResponse(message);
+            addAIContextMessage(chat, 'ai', response);
+        }, 500);
+    };
+    
+    sendBtn.addEventListener('click', sendMessage);
+    input.addEventListener('keypress', (e) => { if (e.key === 'Enter') sendMessage(); });
+    
+    // Автоматически отправляем запрос о приложении
+    setTimeout(() => {
+        sendMessage();
+    }, 300);
+}
+
+function addAIContextMessage(chat, sender, text) {
+    const div = document.createElement('div');
+    div.className = 'ai-message';
+    div.style.marginBottom = '10px';
+    div.style.padding = '8px';
+    div.style.borderRadius = '8px';
+    div.style.background = sender === 'user' ? 'rgba(78,205,196,0.18)' : 'rgba(255,255,255,0.06)';
+    div.innerHTML = `<strong>${sender === 'user' ? 'Вы' : 'Neuron AI'}:</strong> ${text}`;
+    chat.appendChild(div);
+    chat.scrollTop = chat.scrollHeight;
 }
 
 /* ========== Обои и настройки ========== */
@@ -988,18 +1074,6 @@ function initializeSettings() {
 
 function getBuiltinAppContent(appId) {
     switch(appId) {
-        case 'ai':
-            return `
-                <div style="padding:20px;height:100%;display:flex;flex-direction:column;">
-                    <div id="ai-chat" style="flex:1;overflow-y:auto;margin-bottom:10px;padding:10px;background:rgba(0,0,0,0.2);border-radius:10px;">
-                        <div class="ai-message"><strong>Neuron AI:</strong> Привет! Я ваш AI-помощник. Чем могу помочь?</div>
-                    </div>
-                    <div style="display:flex;gap:10px;">
-                        <input id="ai-input" type="text" placeholder="Введите команду..." style="flex:1;padding:10px;border-radius:8px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.1);color:white;">
-                        <button id="ai-send" style="padding:10px 14px;border-radius:8px;background:#4ecdc4;border:none;cursor:pointer;">Отправить</button>
-                    </div>
-                </div>
-            `;
         case 'settings':
             return `<div style="padding:20px;">Загрузка настроек...</div>`;
         default:
@@ -1107,35 +1181,15 @@ function startDrag(e, appId) {
 
 /* ========== Чат ИИ (простая эмуляция) ========== */
 function initializeAIChat() {
-    const sendBtn = document.getElementById('ai-send');
-    const input = document.getElementById('ai-input');
-    if (!sendBtn || !input) return;
-    const sendMessage = () => {
-        const message = input.value.trim();
-        if (!message) return;
-        addAIMessage('user', message);
-        input.value = '';
-        setTimeout(() => {
-            const response = generateAIResponse(message);
-            addAIMessage('ai', response);
-        }, 500);
-    };
-    sendBtn.addEventListener('click', sendMessage);
-    input.addEventListener('keypress', (e) => { if (e.key === 'Enter') sendMessage(); });
+    // Эта функция больше не используется для основного AI окна, так как теперь открывается iframe
+    // Оставлена для совместимости
 }
+
 function addAIMessage(sender, text) {
-    const chat = document.getElementById('ai-chat');
-    if (!chat) return;
-    const div = document.createElement('div');
-    div.className = 'ai-message';
-    div.style.marginBottom = '10px';
-    div.style.padding = '8px';
-    div.style.borderRadius = '8px';
-    div.style.background = sender === 'user' ? 'rgba(78,205,196,0.18)' : 'rgba(255,255,255,0.06)';
-    div.innerHTML = `<strong>${sender === 'user' ? 'Вы' : 'Neuron AI'}:</strong> ${text}`;
-    chat.appendChild(div);
-    chat.scrollTop = chat.scrollHeight;
+    // Эта функция больше не используется для основного AI окна
+    // Оставлена для совместимости
 }
+
 function generateAIResponse(message) {
     const m = message.toLowerCase();
     if (m.includes('привет')) return 'Привет! Чем помочь?';
